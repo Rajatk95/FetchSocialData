@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>Facebook Login JavaScript Example</title>
+<meta charset="UTF-8">
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
+</head>
+<body>
+	<script>
+		// This is called with the results from from FB.getLoginStatus().
+		function statusChangeCallback(response) {
+			console.log('statusChangeCallback');
+			console.log(response);
+			// The response object is returned with a status field that lets the
+			// app know the current login status of the person.
+			// Full docs on the response object can be found in the documentation
+			// for FB.getLoginStatus().
+			if (response.status === 'connected') {
+				// Logged into your app and Facebook.
+				testAPI();
+			} else {
+				// The person is not logged into your app or we are unable to tell.
+				document.getElementById('status').innerHTML = 'Please log '
+						+ 'into this app.';
+			}
+		}
+
+		// This function is called when someone finishes with the Login
+		// Button.  See the onlogin handler attached to it in the sample
+		// code below.
+		function checkLoginState() {
+			FB.getLoginStatus(function(response) {
+				statusChangeCallback(response);
+			});
+		}
+
+		window.fbAsyncInit = function() {
+			FB.init({
+				appId : '1720327638010076',
+				cookie : true, // enable cookies to allow the server to access 
+				// the session
+				xfbml : true, // parse social plugins on this page
+				version : 'v2.8' // use graph api version 2.8
+			});
+
+			// Now that we've initialized the JavaScript SDK, we call 
+			// FB.getLoginStatus().  This function gets the state of the
+			// person visiting this page and can return one of three states to
+			// the callback you provide.  They can be:
+			//
+			// 1. Logged into your app ('connected')
+			// 2. Logged into Facebook, but not your app ('not_authorized')
+			// 3. Not logged into Facebook and can't tell if they are logged into
+			//    your app or not.
+			//
+			// These three cases are handled in the callback function.
+
+			FB.getLoginStatus(function(response) {
+				statusChangeCallback(response);
+			});
+
+		};
+
+		// Load the SDK asynchronously
+		(function(d, s, id) {
+			var js, fjs = d.getElementsByTagName(s)[0];
+			if (d.getElementById(id))
+				return;
+			js = d.createElement(s);
+			js.id = id;
+			js.src = "https://connect.facebook.net/en_US/sdk.js";
+			fjs.parentNode.insertBefore(js, fjs);
+		}(document, 'script', 'facebook-jssdk'));
+
+		// Here we run a very simple test of the Graph API after login is
+		// successful.  See statusChangeCallback() for when this call is made.
+		function testAPI() {
+			console.log('Welcome!  Fetching your information.... ');
+			FB
+					.api(
+							'/me?fields=id,name,gender,photos,birthday,email,friends,location,likes,videos,age_range,hometown,posts',
+							function(response) {
+								console.log('Successful login for: '
+										+ response.name);
+								document.getElementById('status').innerHTML = 'Thanks for logging in!!'
+									+ "    <br /><b> Name  </b>"
+										+ response.name
+										+ "    <br /><b> Gender  </b>"
+										+ response.gender
+										+ "    <br /><b>Last uploaded Photo Id </b> "
+										+ JSON.stringify(response.photos.data[0])
+										+ "<br /> <b>Current Location</b> "
+										+ JSON.stringify(response.location)
+										+ "<br /><b>Hometown </b>"
+										+ JSON.stringify(response.hometown)
+										+ "<br /><b>Email </b>"
+										+ JSON.stringify(response.email)
+										+ "<br /><b>Birthday </b>"
+										+ JSON.stringify(response.birthday)
+										+ "<br /><b>Age range </b>"
+										+ JSON.stringify(response.age_range)
+										+ "<br /><b>Likes </b>"
+										+ JSON.stringify(response.likes.data)});
+			printJsonTable(JSON.stringify(response.likes.data))
+		}
+		
+		function printJsonTable (json) {
+		    
+		  //var json =  [{"name":"Viral in USA","id":"456898118003430","created_time":"2018-04-05T14:26:42+0000"},{"name":"Dude Perfect","id":"133025843429181","created_time":"2017-11-12T11:10:14+0000"},{"name":"The Hook","id":"172573132808153","created_time":"2017-10-19T08:29:19+0000"},{"name":"Digit","id":"110963532384","created_time":"2017-09-02T14:45:48+0000"},{"name":"Jaipur, Rajasthan","id":"106306812739694","created_time":"2017-06-06T19:05:04+0000"},{"name":"LShokeen Films","id":"1453534121610063","created_time":"2017-04-02T19:23:04+0000"},{"name":"X Distro","id":"1415194845415057","created_time":"2017-02-19T09:53:55+0000"},{"name":"DC Design","id":"201302986628434","created_time":"2016-12-11T13:51:41+0000"},{"name":"FICO","id":"131037560306152","created_time":"2016-12-09T04:19:51+0000"},{"name":"LinkedIn","id":"6191007822","created_time":"2014-01-30T04:15:23+0000"},{"name":"Pandas Unlimited","id":"145218725526283","created_time":"2016-08-23T08:33:58+0000"},{"name":"Domino's Pizza India","id":"209562942744","created_time":"2016-08-13T06:19:19+0000"},{"name":"Quora","id":"504460666411687","created_time":"2016-07-14T18:46:43+0000"},{"name":"VIT-A Place to learn, A Chance to grow.","id":"766753863386119","created_time":"2016-05-19T12:08:33+0000"},{"name":"You Belong To A Place Called VIT, where","id":"261794887176191","created_time":"2016-05-14T08:56:33+0000"},{"name":"Jalals","id":"669561433187448","created_time":"2016-05-03T09:12:21+0000"},{"name":"iPanda","id":"395946737156161","created_time":"2016-04-30T13:36:30+0000"},{"name":"Samuel Rajkumar","id":"977764828954306","created_time":"2016-04-11T05:25:46+0000"},{"name":"Sparsh Shah","id":"754452451310640","created_time":"2016-03-12T09:31:59+0000"},{"name":"Varun Pruthi","id":"110283932385165","created_time":"2016-02-21T05:36:41+0000"},{"name":"Animal Addicts","id":"1679455232333695","created_time":"2016-02-14T18:19:27+0000"},{"name":"Riviera, VIT University","id":"295411407250179","created_time":"2016-02-05T04:58:54+0000"},{"name":"NBA","id":"115884448421783","created_time":"2016-02-03T00:07:38+0000"},{"name":"안녕하세요.","id":"113247545381601","created_time":"2015-12-20T17:30:59+0000"},{"name":"VIT University","id":"283544874786","created_time":"2015-12-11T09:30:53+0000"}];
+		        
+		  var tr;
+		  for (var i = 0; i < json.length; i++) {
+		    tr = $('<tr/>');
+		    tr.append("<td>" + json[i].name + "</td>");
+		    tr.append("<td>" + json[i].created_time + "</td>");
+		    $('table').first().append(tr);
+		  }  
+		};
+		</script>
+
+	<!--
+  Below we include the Login Button social plugin. This button uses
+  the JavaScript SDK to present a graphical Login button that triggers
+  the FB.login() function when clicked.
+-->
+
+	<fb:login-button scope="public_profile,email"
+		onlogin="checkLoginState();">
+	</fb:login-button>
+
+	<div id="status"></div>
+	
+	<table>
+    <tr>
+        <th>Page Name</th>
+        <th>Subscribed DateTime</th>
+    </tr>
+</table>p
+
+</body>
+</html>
